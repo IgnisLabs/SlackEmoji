@@ -1,0 +1,9 @@
+suites:
+  ignislabs_slack_emoji_suite:
+    namespace: IgnisLabs\SlackEmoji
+    psr4_prefix: IgnisLabs\SlackEmoji
+
+extensions:
+  - PhpSpec\NyanFormattersExtension\Extension
+
+formatter.name: nyan.cat
