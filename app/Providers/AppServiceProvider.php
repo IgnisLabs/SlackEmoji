@@ -20,10 +20,7 @@ class AppServiceProvider extends ServiceProvider
             $stack = \GuzzleHttp\HandlerStack::create($handler);
 
             $stack->push(\GuzzleHttp\Middleware::mapRequest(function(\Psr\Http\Message\RequestInterface $req) {
-                dd(
-                    $req->getHeader('Content-Type'),
-                    (string) $req->getBody()
-                );
+                // dd($req->getHeader('Content-Type'), (string) $req->getBody());
                 return $req;
             }));
 
