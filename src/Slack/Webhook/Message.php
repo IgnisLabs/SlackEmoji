@@ -118,7 +118,7 @@ class Message implements \JsonSerializable
     public function jsonSerialize()
     {
         $payload = [
-            'message' => $this->getMessage(),
+            'text' => $this->getMessage(),
         ];
 
         if ($this->getChannel()) {

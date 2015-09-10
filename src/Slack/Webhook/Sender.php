@@ -3,7 +3,6 @@
 namespace IgnisLabs\SlackEmoji\Slack\Webhook;
 
 use GuzzleHttp\ClientInterface;
-use IgnisLabs\SlackEmoji\Slack\Webhook\Message;
 
 class Sender
 {
@@ -17,8 +16,8 @@ class Sender
 
     public function send(Message $message)
     {
-        return $this->client->post($this->getUrl(), [
-            'json' => ['text' => $message],
+        return $this->client->request('POST', $this->getUrl(), [
+            'json' => $message,
         ]);
     }
 
