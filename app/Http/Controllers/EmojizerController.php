@@ -19,7 +19,7 @@ class EmojizerController extends Controller
     public function emojize(Emojizer $emojize, Request $request)
     {
         $command = $request->get('command');
-        $emojized = $emojize->disapprove($request->get('message'));
+        $emojized = $emojize->disapprove($request->get('text'));
 
         try {
             if (!$this->sendToSlack($command, $request->get('channel'), $emojized)) {
