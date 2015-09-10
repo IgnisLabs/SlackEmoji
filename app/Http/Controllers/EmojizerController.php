@@ -29,7 +29,7 @@ class EmojizerController extends Controller
             abort(500, $ex->getMessage());
         }
 
-        return response('Sent!', '200')->header('Content-type', 'text/plain');
+        return response('Sent!', '200');
     }
 
     private function sendToSlack($command, $channel, $message)
