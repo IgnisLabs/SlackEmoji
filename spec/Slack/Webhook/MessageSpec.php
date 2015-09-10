@@ -72,7 +72,7 @@ class MessageSpec extends ObjectBehavior
     function it_serializes_as_json_with_no_overrides()
     {
         $this->jsonSerialize()->shouldBeLike([
-            'message' => 'A message',
+            'text' => 'A message',
         ]);
     }
 
@@ -81,7 +81,7 @@ class MessageSpec extends ObjectBehavior
         $this->beConstructedWith('message', '#channel', 'username', ':icon:');
 
         $this->jsonSerialize()->shouldBeLike([
-            'message' => 'message',
+            'text' => 'message',
             'channel' => '#channel',
             'username' => 'username',
             'icon_emoji' => ':icon:',
