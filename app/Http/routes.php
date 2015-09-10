@@ -16,3 +16,4 @@ $app->get('/', function () use ($app) {
 });
 
 $app->get('emojize', 'EmojizerController@emojize');
+$app->post('emojize', 'EmojizerController@emojize');
