@@ -21,12 +21,15 @@ class EmojizerController extends Controller
         $command = $request->get('command');
         $emojized = $emojize->disapprove($request->get('message'));
 
-        if (!$this->sendToSlack($command, $request->get('channel'), $emojized)) {
-            abort(500, "Command [$command] not recognized");
+        try {
+            if (!$this->sendToSlack($command, $request->get('channel'), $emojized)) {
+                abort(500, "Command [$command] not recognized");
+            }
+        } catch (\Exception $ex) {
+            abort(500, $ex->getMessage());
         }
 
-        return response(['text' => $emojized], '200')
-            ->header('Content-type', 'application/json');
+        return response('Sent!', '200')->header('Content-type', 'text/plain');
     }
 
     private function sendToSlack($command, $channel, $message)
