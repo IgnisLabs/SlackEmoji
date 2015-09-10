@@ -22,7 +22,7 @@ class EmojizerController extends Controller
         $emojized = $emojize->disapprove($request->get('text'));
 
         try {
-            if (!$this->sendToSlack($command, $request->get('channel'), $emojized)) {
+            if (!$this->sendToSlack($command, $request->get('channel_name'), $emojized)) {
                 abort(500, "Command [$command] not recognized");
             }
         } catch (\Exception $ex) {
