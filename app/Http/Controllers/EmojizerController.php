@@ -16,13 +16,16 @@ class EmojizerController extends Controller
         $this->sender = $sender;
     }
 
-    public function emojize(Emojizer $emojize, Request $request)
+    public function emojize(Emojizer $emojizer, Request $request)
     {
+        $message = $request->get('text');
         $command = $request->get('command');
-        $emojized = $emojize->disapprove($request->get('text'));
+        $channel = $request->get('channel_name');
+
+        $emojized = $this->emojizeMessage($command, $message, $emojizer);
 
         try {
-            if (!$this->sendToSlack($command, $request->get('channel_name'), $emojized)) {
+            if (!$this->sender->send(new W\Message($emojized, '#'.$channel))) {
                 abort(500, "Command [$command] not recognized");
             }
         } catch (\Exception $ex) {
@@ -32,7 +35,13 @@ class EmojizerController extends Controller
         return response('Sent!', '200');
     }
 
-    private function sendToSlack($command, $channel, $message)
+    /**
+     * @param $command
+     * @param string $message
+     * @param Emojizer $emojize
+     * @return string
+     */
+    private function emojizeMessage($command, $message, Emojizer $emojize)
     {
         $commands = [
             '/tableflip' => 'flipTable',
@@ -46,6 +55,6 @@ class EmojizerController extends Controller
             return false;
         }
 
-        return $this->sender->send(new W\Message($message, '#'.$channel));
+        return $emojize->$commands[$command]($message);
     }
 }
