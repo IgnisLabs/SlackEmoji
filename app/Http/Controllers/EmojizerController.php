@@ -32,7 +32,7 @@ class EmojizerController extends Controller
             abort(500, $ex->getMessage());
         }
 
-        return response('Sent!', '200');
+        return '';
     }
 
     /**
