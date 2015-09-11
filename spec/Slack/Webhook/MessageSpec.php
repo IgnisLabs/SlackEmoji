@@ -86,5 +86,7 @@ class MessageSpec extends ObjectBehavior
             'username' => 'username',
             'icon_emoji' => ':icon:',
         ]);
+
+        $this->toArray()->shouldBeLike($this->jsonSerialize());
     }
 }

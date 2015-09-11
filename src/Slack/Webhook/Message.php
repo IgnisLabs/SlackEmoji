@@ -117,6 +117,11 @@ class Message implements \JsonSerializable
 
     public function jsonSerialize()
     {
+        return $this->toArray();
+    }
+
+    public function toArray()
+    {
         $payload = [
             'text' => $this->getMessage(),
         ];
