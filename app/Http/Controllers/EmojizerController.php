@@ -21,11 +21,12 @@ class EmojizerController extends Controller
         $message = $request->get('text');
         $command = $request->get('command');
         $channel = $request->get('channel_name');
+        $username = $request->get('user_name');
 
         $emojized = $this->emojizeMessage($command, $message, $emojizer);
 
         try {
-            if (!$this->sender->send(new W\Message($emojized, '#'.$channel))) {
+            if (!$this->sender->send(new W\Message($emojized, '#'.$channel, $username))) {
                 abort(500, "Command [$command] not recognized");
             }
         } catch (\Exception $ex) {
