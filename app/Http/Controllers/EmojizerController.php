@@ -22,7 +22,7 @@ class EmojizerController extends Controller
             abort(400, 'NOPE');
         }
 
-        $message = $request->get('text');
+        $message = $request->get('text', 'help');
         $channel = $request->get('channel_name');
         $username = $request->get('user_name');
 
