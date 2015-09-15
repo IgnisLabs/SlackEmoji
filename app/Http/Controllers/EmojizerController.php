@@ -18,44 +18,25 @@ class EmojizerController extends Controller
 
     public function emojize(Emojizer $emojizer, Request $request)
     {
+        if ($request->get('command') !== '/emojize') {
+            abort(400, 'NOPE');
+        }
+
         $message = $request->get('text');
-        $command = $request->get('command');
         $channel = $request->get('channel_name');
         $username = $request->get('user_name');
 
-        $emojized = $this->emojizeMessage($command, $message, $emojizer);
-
         try {
-            if (!$this->sender->send(new W\Message($emojized, '#'.$channel, $username))) {
-                abort(500, "Command [$command] not recognized");
+            list($command, $message) = $emojizer->parseInput($message);
+
+            if ($command === 'help') {
+                return $emojizer->help();
             }
+
+            $emojized = $emojizer->{$command}($message);
+            $this->sender->send(new W\Message($emojized, '#'.$channel, $username));
         } catch (\Exception $ex) {
             abort(500, $ex->getMessage());
         }
-
-        return '';
-    }
-
-    /**
-     * @param $command
-     * @param string $message
-     * @param Emojizer $emojize
-     * @return string
-     */
-    private function emojizeMessage($command, $message, Emojizer $emojize)
-    {
-        $commands = [
-            '/tableflip' => 'flipTable',
-            '/disapproval' => 'dissaprove',
-            '/lenny' => 'lennyFace',
-            '/concerned' => 'lookConcerned',
-            '/YUNO' => 'YUNO',
-        ];
-
-        if (!array_key_exists($command, $commands)) {
-            return false;
-        }
-
-        return $emojize->$commands[$command]($message);
     }
 }
