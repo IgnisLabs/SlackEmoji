@@ -2,11 +2,23 @@
 
 namespace IgnisLabs\SlackEmoji;
 
+use IgnisLabs\SlackEmoji\Emojizer\Renderer;
+
 class Emojizer
 {
+    /**
+     * @var Renderer
+     */
+    private $renderer;
+
+    public function __construct(Renderer $renderer)
+    {
+        $this->renderer = $renderer;
+    }
+
     public function disapprove($msg)
     {
-        return $this->emojized('ಠ_ಠ', $msg);
+        return $this->renderer->render('ಠ_ಠ', $msg);
     }
 
     public function flipTable($msg)
@@ -23,12 +35,12 @@ class Emojizer
             $bangs = strlen($m[1]);
         }
 
-        return $this->emojized($flippings[$bangs], $msg);
+        return $this->renderer->render($flippings[$bangs], $msg);
     }
 
     public function lennyFace($msg)
     {
-        return $this->emojized('( ͡° ͜ʖ ͡°)', $msg);
+        return $this->renderer->render('( ͡° ͜ʖ ͡°)', $msg);
     }
 
     public function lookConcerned($msg)
@@ -44,12 +56,12 @@ class Emojizer
             $bangs = strlen($m[1]);
         }
 
-        return $this->emojized($faces[$bangs], $msg);
+        return $this->renderer->render($faces[$bangs], $msg);
     }
 
     public function YUNO($msg)
     {
-        return $this->emojized('ლ(ಠ益ಠლ)', $msg);
+        return $this->renderer->render('ლ(ಠ益ಠლ)', $msg);
     }
 
     private function emojized($emoji, $msg)
