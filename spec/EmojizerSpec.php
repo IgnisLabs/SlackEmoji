@@ -18,18 +18,21 @@ class EmojizerSpec extends ObjectBehavior
         $this->shouldHaveType('IgnisLabs\SlackEmoji\Emojizer');
     }
 
-    function it_looks_with_disapproval()
+    function it_parses_input_into_emoji_command_and_message()
     {
-        $this->disapprove('lorem ipsum')->shouldReturn('ಠ_ಠ lorem ipsum');
+        $this->parseInput('disapprove: foo bar')->shouldBeLike(['disapprove', 'foo bar']);
+    }
+    
+    function it_fails_to_parse_input_if_command_is_not_recognized()
+    {
+        $this->shouldThrow('\DomainException')->duringParseInput('foo: bar');
     }
 
-    function it_flips_tables()
+    function it_fails_to_parse_input_if_command_is_not_help_and_no_message_is_given()
     {
-        $this->flipTable('lorem ipsum')->shouldReturn('(╯°□°)╯︵ ┻━━┻ lorem ipsum');
-        $this->flipTable('lorem ipsum!')->shouldReturn('(╯°Д°)╯彡┻━━┻ lorem ipsum!');
-        $this->flipTable('lorem ipsum!!')->shouldReturn('(ノಥ益ಥ)ノ彡┻━━┻ lorem ipsum!!');
-        $this->flipTable('lorem ipsum!!!')->shouldReturn('┻━━┻ ︵ヽ(`Д´)ﾉ︵ ┻━━┻ lorem ipsum!!!');
-        $this->flipTable('lorem ipsum!!!!')->shouldReturn('┻━━┻ ︵ヽ(`Д´)ﾉ︵ ┻━━┻ lorem ipsum!!!!');
+        $this->shouldThrow('\DomainException')->duringParseInput('foo');
+        $this->shouldThrow('\DomainException')->duringParseInput('foo:');
+        $this->shouldNotThrow('\Exception')->duringParseInput('help');
     }
 
     function it_looks_with_disapproval(Renderer $renderer)
@@ -78,8 +81,9 @@ class EmojizerSpec extends ObjectBehavior
         $this->YUNO('lorem ipsum')->shouldBe('foo');
     }
 
-    function it_Y_U_NO()
+    function it_shows_help(Renderer $renderer)
     {
-        $this->YUNO('lorem ipsum')->shouldReturn('ლ(ಠ益ಠლ) lorem ipsum');
+        $renderer->renderHelp($this->getHelp(), 'a message')->willReturn('foo')->shouldBeCalled();
+        $this->help('a message')->shouldBe('foo');
     }
 }
