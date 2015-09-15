@@ -5,6 +5,8 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use GuzzleHttp\Client as GuzzleClient;
 use IgnisLabs\SlackEmoji\Slack\Webhook\Sender as WebhookSender;
+use IgnisLabs\SlackEmoji\Emojizer\Renderer;
+use IgnisLabs\SlackEmoji\Emojizer\DefaultRenderer;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -29,5 +31,7 @@ class AppServiceProvider extends ServiceProvider
                 new GuzzleClient(['handler' => $stack])
             );
         });
+
+        $this->app->bind(Renderer::class, DefaultRenderer::class);
     }
 }
