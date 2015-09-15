@@ -5,6 +5,7 @@ namespace App\Exceptions;
 use Exception;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 class Handler extends ExceptionHandler
 {
@@ -39,6 +40,10 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
-        return $e->getMessage(); // parent::render($request, $e);
+        $statusCode = $e instanceof HttpExceptionInterface
+            ? $e->getStatusCode()
+            : 200;
+
+        return response($e->getMessage(), $statusCode); // parent::render($request, $e);
     }
 }
